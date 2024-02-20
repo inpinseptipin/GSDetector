@@ -4,7 +4,8 @@
 Q6045 E MKII - PTZ Camera (60Hz)
 
 ## Dataset
-http://cadreforensics.com/audio/download/
+https://cadreforensics.com/audio/
+Download: http://cadreforensics.com/audio/download/
 
 ## gsDetect Documentation
 
