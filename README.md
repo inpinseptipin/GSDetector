@@ -4,7 +4,17 @@
 Q6045 E MKII - PTZ Camera (60Hz)
 
 ## Dataset
+### National Library of Medicine [NCBI]
+Paper: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10114508/
+
+Download: https://zenodo.org/records/7004819
+
+### Low-Cost Gunshot Detection [Harvard]
+Download: https://dataverse.harvard.edu/file.xhtml?fileId=4190241&version=1.0
+
+### Forensics
 https://cadreforensics.com/audio/
+
 Download: http://cadreforensics.com/audio/download/
 
 ## gsDetect Documentation
