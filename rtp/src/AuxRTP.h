@@ -5,23 +5,58 @@
 
 namespace AuxPort
 {
-	class Session
+	namespace RTP
 	{
-	public:
-		enum Flags
+
+		void rtp_receive_hook(void* arg, uvgrtp::frame::rtp_frame* frame);
+
+
+		class Session
 		{
-			sendOnly,receiveOnly,sendAndReceive
+		public:
+			Session() = default;
+			~Session();
+			Session(const Session& session) = default;
+			void attachContext(uvgrtp::context* context);
+			void createSession(const std::string& remoteAddress);
+			virtual void setFlags() = 0;
+			std::string getRemoteAddress();
+			void createStream(const uint16_t remotePort);
+		protected:
+			uvgrtp::context* context;
+			uvgrtp::media_stream* mediaStream;
+			std::string remoteAddress;
+			uvgrtp::session* session;
+			int flags = -1;
 		};
-		Session() = default;
-		~Session() = default;
-		void createSession(const std::string& remoteAddress, uint16_t remortPort);
-		void setFlag(const Flags& flags = Flags::sendOnly);
-		Session(const Session& session) = default;
-	private:
-		std::string remoteAddress;
-		uint16_t remotePort;
-		Flags flag;
-	};
+
+
+		class Client : public Session
+		{
+		public:
+			Client() = default;
+			~Client() = default;
+			Client(const Client& client) = default;
+			void setFlags() override;
+			bool run();
+		private:
+		};
+
+		class Server : public Session
+		{
+		public:
+			Server() = default;
+			~Server() = default;
+			Server(const Server& client) = default;
+			void setFlags() override;
+			void run();
+		private:
+		};
+
+
+;
+
+	}
 }
 
 #endif
