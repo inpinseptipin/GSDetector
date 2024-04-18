@@ -1,21 +1,21 @@
-# GSDetector
+# Gun Shot Detector
+
+## Datasets
+
+### [A Multi-Firearm, Multi-Orientation Audio Dataset of Gunshots [NCBI]](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10114508/)
+
+### [The Gunshot Audio Forensics Dataset [Cadre Forensics]](https://cadreforensics.com/audio/)
+
+### [Gunshot Detection Dataset [Kaggle]](https://www.kaggle.com/akshaybahadur21/gunshot-detection-dataset)
+
+### [UrbanSound8K [Kaggle]](https://www.kaggle.com/datasets/chrisfilo/urbansound8k)
+
+### [Environmental Sound Classification 50 [Kaggle]](https://www.kaggle.com/mmoreaux/environmental-sound-classification-50)
+
+### ~~[Low-Cost Gunshot Detection [Harvard]](https://dataverse.harvard.edu/file.xhtml?fileId=4190241&version=1.0)~~ (low quality, no longer needed)
 
 ## Camera
 Q6045 E MKII - PTZ Camera (60Hz)
-
-## Dataset
-### National Library of Medicine [NCBI]
-Paper: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10114508/
-
-Download: https://zenodo.org/records/7004819
-
-### Low-Cost Gunshot Detection [Harvard]
-Download: https://dataverse.harvard.edu/file.xhtml?fileId=4190241&version=1.0
-
-### Forensics
-https://cadreforensics.com/audio/
-
-Download: http://cadreforensics.com/audio/download/
 
 ## gsDetect Documentation
 
