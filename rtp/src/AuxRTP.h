@@ -2,6 +2,8 @@
 #define AUXPORT_RTP_H
 
 #include "uvgrtp/lib.hh"
+#include "AuxPort.h"
+#include "AuxWave.h"
 
 namespace AuxPort
 {
@@ -31,7 +33,7 @@ namespace AuxPort
 		};
 
 
-		class Client : public Session
+		class Client : public Session,AuxPort::ILog
 		{
 		public:
 			Client() = default;
@@ -39,6 +41,8 @@ namespace AuxPort
 			Client(const Client& client) = default;
 			void setFlags() override;
 			bool run();
+			void Log() override;
+			std::vector<float> packetBuffer;
 		private:
 		};
 

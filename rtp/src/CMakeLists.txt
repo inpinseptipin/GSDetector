@@ -33,6 +33,8 @@
 #			OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 cmake_minimum_required(VERSION 3.10)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(AUXPORT_VERSION 0.1)
 include(FetchContent)
 
@@ -52,13 +54,27 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(uvgrtp)
 
+# Fetching AudioFile
+FetchContent_Declare(
+	audiofile
+	GIT_REPOSITORY https://github.com/adamstark/AudioFile.git
+	GIT_TAG master
+)
+FetchContent_MakeAvailable(audiofile)
+
+
+
 project(AuxRTP)
 add_executable(
 	${PROJECT_NAME}
-	main.cpp
 	AuxRTP.cpp
-	AuxRTP.h 
+	AuxRTP.h
+	AuxWave.cpp
+	AuxWave.h
+	main.cpp 
 )
+
+
 
 # Adding AuxPort include directories
 target_include_directories(${PROJECT_NAME} PUBLIC "${AuxTest_SOURCE_DIR}/AuxPort")
@@ -66,10 +82,47 @@ target_include_directories(${PROJECT_NAME} PUBLIC "${AuxTest_SOURCE_DIR}/AuxPort
 target_link_libraries(${PROJECT_NAME} PUBLIC AuxPort)
 
 
+
+# Adding LibTorch Header Files
+target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_SOURCE_DIR}/vendor/include")
+target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_SOURCE_DIR}/vendor/include/torch/csrc/api/include")
+
+
+
+# Adding LibTorch Static Libraries
+target_link_libraries(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/vendor/libs/Static/asmjit.lib)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/vendor/libs/Static/c10.lib)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/vendor/libs/Static/clog.lib)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/vendor/libs/Static/cpuinfo.lib)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/vendor/libs/Static/dnnl.lib)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/vendor/libs/Static/fbgemm.lib)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/vendor/libs/Static/fbjni.lib)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/vendor/libs/Static/fmtd.lib)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/vendor/libs/Static/kineto.lib)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/vendor/libs/Static/libprotobufd.lib)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/vendor/libs/Static/libprotobuf-lited.lib)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/vendor/libs/Static/libprotocd.lib)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/vendor/libs/Static/pthreadpool.lib)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/vendor/libs/Static/pytorch_jni.lib)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/vendor/libs/Static/torch.lib)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/vendor/libs/Static/torch_cpu.lib)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/vendor/libs/Static/XNNPACK.lib)
+
+
+
+
+
 # Adding uvgrtp include directories
 target_include_directories(${PROJECT_NAME} PUBLIC "${uvgrtp_SOURCE_DIR}/include")
-# Linking CURL import Libraries and other required Librarires
+# Linking uvgrtp import Libraries and other required Librarires
 target_link_libraries(${PROJECT_NAME} PUBLIC debug "${uvgrtp_BINARY_DIR}/Debug/uvgrtp.lib" optimized "${uvgrtp_BINARY_DIR}/Release/uvgrtp.lib")
 target_link_libraries(${PROJECT_NAME} PUBLIC Ws2_32.lib)
 target_link_libraries(${PROJECT_NAME} PUBLIC Advapi32.lib)
 
+
+# Adding AudioFile include directories
+target_include_directories(${PROJECT_NAME} PUBLIC "${audiofile_SOURCE_DIR}/")
+
+
+
+	
