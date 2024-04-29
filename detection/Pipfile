@@ -14,12 +14,18 @@ pyaudio = "*"
 pandas = "*"
 tqdm = "*"
 torchvision = "*"
-pydub = "*"
-ffprobe = "*"
-sounddevice = "*"
+scikit-learn = "*"
+seaborn = "*"
+keras = "*"
+torcheval = "*"
+onnx = "*"
+onnxscript = "*"
+tensorboard = "*"
+tensorflow = "*"
 
 [dev-packages]
 ipykernel = "*"
+torch-tb-profiler = "*"
 
 [requires]
 python_version = "3.11"
