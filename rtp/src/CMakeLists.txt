@@ -69,8 +69,11 @@ add_executable(
 	${PROJECT_NAME}
 	AuxRTP.cpp
 	AuxRTP.h
+	AuxAudioQueue.cpp
+	AuxAudioQueue.h
 	AuxWave.cpp
 	AuxWave.h
+	AuxSpectral.h
 	main.cpp 
 )
 
