@@ -3,7 +3,8 @@ import numpy as np
 import torch
 from torch.utils.data import Dataset, ConcatDataset
 import torchaudio
-import torchaudio.functional as F
+from torchaudio.functional import resample
+from torch.nn.functional import pad
 import torchaudio.transforms as T
 import matplotlib.pyplot as plt
 
@@ -53,7 +54,7 @@ def crop_or_pad(waveform, sample_rate=44100, desired_length=2) -> torch.Tensor:
         pad_right = pad_length - pad_left
 
         # Apply padding
-        new_waveform = F.pad(waveform, (pad_left, pad_right), 'reflect')
+        new_waveform = pad(waveform, (pad_left, pad_right), 'reflect')
     
     assert new_waveform.shape[1] == desired_samples
 
@@ -129,7 +130,7 @@ class GunshotDataset(Dataset):
                         filepath = os.path.join(root_dir, sub_dir, fname)
                         self.filepaths.append(filepath)
                         waveform, orig_freq = torchaudio.load(filepath)
-                        waveform = F.resample(waveform, orig_freq=orig_freq, new_freq=self.sample_rate)
+                        waveform = resample(waveform, orig_freq=orig_freq, new_freq=self.sample_rate)
                         waveform = crop_or_pad(waveform, self.sample_rate, self.clip_length)
                         
                         for transform in self.wav_transforms:
@@ -183,7 +184,6 @@ class LightweightGSDataset(Dataset):
             spec = transform(spec)
 
         return spec, self.label
-    
     
     
 def _test():
