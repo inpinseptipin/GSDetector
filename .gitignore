@@ -214,7 +214,7 @@ pyrightconfig.json
 *.mp3
 *.mpa
 *.ra
-*.wav
+# *.wav
 *.wma
 *.ogg
 *.flac
