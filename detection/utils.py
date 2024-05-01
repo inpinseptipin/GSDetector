@@ -1,8 +1,6 @@
 import timeit
-import numpy as np
+
 import torch
-import torchaudio
-import torch.nn.functional as F
 
 
 @torch.no_grad()
@@ -22,18 +20,16 @@ def get_inference_rate(model, data=torch.rand(1, 1, 256, 256), iters=1000) -> fl
     data.requires_grad_(False)
     time_per = 0
     time_per = timeit.timeit(lambda: model(data), number=iters) / iters
-    fps = 1/time_per
-    
-    return fps
+    return 1 / time_per
 
 
 def compile_and_save(
     model: torch.nn.Module,
     picklepath: str,
-    data: torch.Tensor=torch.rand(1, 1, 256, 256),
-    save_onnx: bool=True,
-    input_names: list[str]=["Spectrogram"],
-    output_names: list[str]=["Probability of Gunshot"]
+    data: torch.Tensor = torch.rand(1, 1, 256, 256),
+    save_onnx: bool = True,
+    input_names: list[str] = None,
+    output_names: list[str] = None,
 ):
     """
     Compile and save the model.
@@ -48,15 +44,18 @@ def compile_and_save(
     """
     model.load_state_dict(torch.load(picklepath))
     model.eval()
-    jitpath = picklepath.replace('pickle', 'compiled') + 'c'
+    jitpath = picklepath.replace("pickle", "compiled") + "c"
     traced_module = torch.jit.trace(model, data)
     traced_module.save(jitpath)
-    
+
     if save_onnx:
+        input_names = input_names or ["Spectrogram"]
+        output_names = output_names or ["Probability of Gunshot"]
+
         torch.onnx.export(
             model=model,
             args=data,
-            f=jitpath.replace('compiled', 'onnx').replace('.ptc', '.onnx'),
+            f=jitpath.replace("compiled", "onnx").replace(".ptc", ".onnx"),
             input_names=input_names,
-            output_names=output_names
+            output_names=output_names,
         )
