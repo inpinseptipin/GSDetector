@@ -218,3 +218,7 @@ pyrightconfig.json
 *.wma
 *.ogg
 *.flac
+
+
+### Pytorch ###
+*.pt
