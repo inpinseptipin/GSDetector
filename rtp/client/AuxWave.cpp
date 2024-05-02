@@ -29,7 +29,7 @@ void AuxPort::WaveFile::getBuffer(std::vector<float>& buffer)
 		if (zeroPadAmount && currentBuffer == numberOfBuffers - 1)
 		{
 			for (uint32_t i = 0; i < buffer.size(); i++)
-				buffer[i] = counter == file.samples[0].size() - 1 ? 0.0f : getSample();
+				buffer[i] = counter >= file.samples[0].size() - 1 ? 0.0f : getSample();
 			counter = 0;
 		}
 		else

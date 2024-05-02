@@ -64,7 +64,7 @@ FetchContent_MakeAvailable(audiofile)
 
 
 
-project(AuxRTP)
+project(Client)
 add_executable(
 	${PROJECT_NAME}
 	AuxRTP.cpp

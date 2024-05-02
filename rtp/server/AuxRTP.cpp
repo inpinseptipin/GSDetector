@@ -28,56 +28,6 @@ void AuxPort::RTP::Session::createStream(const uint16_t remotePort)
 	mediaStream = session->create_stream(remotePort, RTP_FORMAT_GENERIC, flags);
 }
 
-void AuxPort::RTP::rtp_receive_hook(void* arg, uvgrtp::frame::rtp_frame* frame)
-{
-	AuxPort::Logger::Log("Received RTP Frame, Payload Size : " + frame->payload_len);
-
-	Client* client = static_cast<Client*>(arg);
-
-	if (client->packetBuffer.size() != frame->payload_len/4)
-		client->packetBuffer.resize(frame->payload_len/4);
-	
-	float* data = reinterpret_cast<float*>(frame->payload);
-
-
-	for(uint32_t i = 0;i<frame->payload_len/4;i++)
-	{
-		client->packetBuffer[i] = data[i];
-	}
-
-	client->Log();
-
-	(void)uvgrtp::frame::dealloc_frame(frame);
-}
-
-
-void AuxPort::RTP::Client::setFlags()
-{
-	flags = RCE_FRAGMENT_GENERIC | RCE_RECEIVE_ONLY;
-}
-
-
-
-bool AuxPort::RTP::Client::run()
-{
-	AuxPort::Logger::Log("Client ready to Retrieve Data");
-	if (!session || mediaStream->install_receive_hook(this, rtp_receive_hook) != RTP_OK)
-	{
-		std::cerr << "Failed to install RTP receive hook!" << std::endl;
-		return 0;
-	}
-
-}
-
-void AuxPort::RTP::Client::Log()
-{
-	std::cout << "[";
-	for (uint32_t i = 0; i < packetBuffer.size(); i++)
-	{
-		std::cout << packetBuffer[i] << " , ";
-	}
-	std::cout << "]";
-}
 
 void AuxPort::RTP::Server::setFlags()
 {
@@ -86,25 +36,25 @@ void AuxPort::RTP::Server::setFlags()
 
 void AuxPort::RTP::Server::run()
 {
+	
 	auto media = std::unique_ptr<uint8_t[]>(new uint8_t[512]);
 	uint32_t count = 0;
 	AuxPort::Logger::Log("Server ready to Send Data");
 	
 
 
-	while (count < 3)
+	while (!audioQueue.isExhausted())
 	{
 		if (send)
 		{
-			auto vector = AuxPort::Utility::generateRandomValues<float>(4);
+			auto vector = audioQueue.getBuffer();
 			auto vecAsUint = (uint8_t*)vector.data();
 			for (uint32_t i = 0; i < vector.size() * 4; i++)
 				media[i] = vecAsUint[i];
 
-			AuxPort::Logger::Log("Packet Sent : " + AuxPort::Casters::toStdString(count));
+			/*AuxPort::Logger::Log("Packet Sent : " + AuxPort::Casters::toStdString(count));
+			count++;*/
 
-			
-			count++;
 			if (mediaStream->push_frame(media.get(), vector.size()*4, RTP_NO_FLAGS) != RTP_OK)
 			{
 				std::cerr << "Failed to send frame!" << std::endl;
@@ -113,5 +63,20 @@ void AuxPort::RTP::Server::run()
 	}
 		
 		
+	
+}
+
+void AuxPort::RTP::Server::setFolders(const std::vector<std::string> folderNames)
+{
+	audioQueue.setBufferSize(128);
+	std::vector<std::string> files;
+	for (uint32_t i = 0; i < folderNames.size(); i++)
+	{
+		directory.setDirectory(folderNames[i]);
+		auto data = directory.getListOfFiles(".wav");
+		for (uint32_t i = 0; i < data.size(); i++)
+			files.push_back(data[i]);
+	}
+	audioQueue.setFileNames(files);
 	
 }

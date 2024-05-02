@@ -17,6 +17,7 @@ std::vector<float>& AuxPort::AudioQueue::getBuffer()
 	if (waveFile.isExhausted() && fileQueue.size() > 0)
 	{
 		waveFile.load(fileQueue.front());
+		AuxPort::Logger::Log("Loading : " + fileQueue.front());
 		fileQueue.pop();
 	}
 	waveFile.getBuffer(buffer);

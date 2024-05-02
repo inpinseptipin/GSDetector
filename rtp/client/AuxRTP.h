@@ -3,8 +3,8 @@
 
 #include "uvgrtp/lib.hh"
 #include "AuxPort.h"
-#include "AuxWave.h"
-
+#include "AuxAudioQueue.h"
+#include "Utility.h"
 namespace AuxPort
 {
 	namespace RTP
@@ -42,25 +42,16 @@ namespace AuxPort
 			void setFlags() override;
 			bool run();
 			void Log() override;
-			std::vector<float> packetBuffer;
+			AuxPort::AudioQueue audioQueue;
 		private:
+			uint32_t bufferID = 0;
 		};
 
-		class Server : public Session
-		{
-		public:
-			Server() = default;
-			~Server() = default;
-			Server(const Server& client) = default;
-			void setFlags() override;
-			void run();
-		private:
-		};
-
-
-;
-
+		
 	}
+
+
+
 }
 
 #endif

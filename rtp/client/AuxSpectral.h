@@ -57,6 +57,7 @@ namespace Spectral
 		void reset(size_t overlapSize)
 		{
 			_prevInputs.resize(overlapSize);
+			std::fill(_prevInputs.begin(), _prevInputs.end(), 0.0f);
 		}
 
 		std::vector<sampleType> getOverlappedBuffer(const std::vector<sampleType>& inputBuffer)
