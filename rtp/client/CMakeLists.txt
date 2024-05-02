@@ -63,10 +63,20 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(audiofile)
 
 
+# Fetching CURL
+FetchContent_Declare(
+	curl
+	GIT_REPOSITORY https://github.com/curl/curl
+	GIT_TAG	master
+)
+FetchContent_MakeAvailable(curl)
+
 
 project(Client)
 add_executable(
 	${PROJECT_NAME}
+	AuxCurl.cpp
+	AuxCurl.h
 	AuxRTP.cpp
 	AuxRTP.h
 	AuxAudioQueue.cpp
@@ -76,6 +86,19 @@ add_executable(
 	AuxSpectral.h
 	main.cpp 
 )
+
+
+
+# Adding CURL include directories
+target_include_directories(${PROJECT_NAME} PUBLIC "${CURL_SOURCE_DIR}/include")
+# Linking CURL import Libraries and other required Librarires
+target_link_libraries(${PROJECT_NAME} PUBLIC debug "${CURL_BINARY_DIR}/lib/Debug/libcurl-d.lib" optimized "${CURL_BINARY_DIR}/lib/Release/libcurl.lib")
+target_link_libraries(${PROJECT_NAME} PUBLIC Ws2_32.lib)
+target_link_libraries(${PROJECT_NAME} PUBLIC Crypt32.lib)
+target_link_libraries(${PROJECT_NAME} PUBLIC Wldap32.lib)
+target_link_libraries(${PROJECT_NAME} PUBLIC Normaliz.lib)
+
+
 
 
 
