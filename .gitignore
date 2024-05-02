@@ -222,3 +222,6 @@ pyrightconfig.json
 
 ### Pytorch ###
 *.pt
+
+# Ignore data files
+detection/data/waveforms/
